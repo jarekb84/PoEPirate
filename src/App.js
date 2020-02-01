@@ -1,28 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-
-export const proxy = url => {
-  return `https://cors-anywhere.herokuapp.com/${url}`;
-};
-
-const getData = async type => {
-  const response = await fetch(
-    proxy(
-      `https://poe.ninja/api/data/itemoverview?league=Metamorph&type=${type}&language=en`
-    ),
-    {
-      method: "GET",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    }
-  );
-
-  const data = await response.json();
-
-  return data.lines;
-};
+import { getDataMock as getData } from "./data/fetchData";
 
 function App() {
   const [divCards, setDivCards] = useState([]);
@@ -41,6 +19,7 @@ function App() {
     getData("UniqueWeapon").then(setUniqueWeapons);
   }, []);
   const allItems = [
+    ...divCards,
     ...skillGems,
     ...uniqueAccessories,
     ...uniqueArmours,
@@ -48,27 +27,14 @@ function App() {
     ...uniqueWeapons
   ];
 
-  const cardsToTrack = [
-    "Beauty Through Death",
-    "The World Eater",
-    "The Queen",
-    "The Damned",
-    "Wealth and Power",
-    "Pride of the First Ones",
-    "Succor of the Sinless",
-    `Hunter's Reward`
-  ];
-
-  const matchedItems = divCards.filter(card =>
-    cardsToTrack.includes(card.name)
-  );
-
   function extractDivCardOutput(card) {
-    const modifierText = card.explicitModifiers[0].text;
-    const name = modifierText.match(/(?<={)(.*)(?=})/)[0];
+    const modifierText =
+      ((card || { explicitModifiers: [] }).explicitModifiers[0] || {}).text ||
+      "";
+    const name = (modifierText.match(/(?<={)(.*)(?=})/) || [])[0];
 
     let result = {
-      type: modifierText.match(/(?<=<)(.*)(?=>)/)[0],
+      type: (modifierText.match(/(?<=<)(.*)(?=>)/) || [])[0],
       item: allItems.find(item => item.name === name && item.links === 0) || {}
     };
 
@@ -134,6 +100,7 @@ function App() {
             <th>Cost</th>
             <th>Stack</th>
             <th>Stack Cost</th>
+            <th>OutputType</th>
             <th>Output</th>
             <th>Revenue</th>
             <th>Profit</th>
@@ -141,7 +108,7 @@ function App() {
           </tr>
         </thead>
         <tbody>
-          {matchedItems.map(item => {
+          {divCards.map(item => {
             const outputItem = extractDivCardOutput(item);
             const cardCost = getCost(item);
             const outputCost = getCost(outputItem.item);
@@ -158,6 +125,7 @@ function App() {
                 <td>{cardCost.text}</td>
                 <td>{item.stackSize}</td>
                 <td>{cardCost.stackText}</td>
+                <td>{outputItem.type}</td>
                 <td>{outputItem.item.name}</td>
                 <td>{outputCost.text}</td>
                 <td>
