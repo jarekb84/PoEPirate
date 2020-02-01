@@ -40,10 +40,10 @@ export default function TradeTable({ items }) {
                 <td>{outputItem.item.name}</td>
                 <td>{outputCost.text}</td>
                 <td>
-                  {profit}
+                  {isNaN(profit) ? "" : profit}
                   {outputCost.suffix}
                 </td>
-                <td>{margin}%</td>
+                <td>{isNaN(margin) ? "" : `${margin}%`}</td>
               </tr>
             );
           }
