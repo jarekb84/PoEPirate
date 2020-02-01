@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import divCards from "./sampleData/divinationCards";
-// import skillGems from "./sampleData/skillGems";
-// import uniqueAccessories from "./sampleData/uniqueAccessories";
-// import uniqueArmours from "./sampleData/uniqueArmours";
-// import uniqueFlasks from "./sampleData/uniqueFlasks";
-// import uniqueWeapons from "./sampleData/uniqueWeapons";
+
+export const proxy = url => {
+  return `https://cors-anywhere.herokuapp.com/${url}`;
+};
 
 const getData = async type => {
   const response = await fetch(
-    `https://poe.ninja/api/data/itemoverview?league=Metamorph&type=${type}&language=en`,
+    proxy(
+      `https://poe.ninja/api/data/itemoverview?league=Metamorph&type=${type}&language=en`
+    ),
     {
       method: "GET",
       mode: "cors",
@@ -25,20 +25,27 @@ const getData = async type => {
 };
 
 function App() {
-  //const [divCards, setDivCards] = useState([]);
+  const [divCards, setDivCards] = useState([]);
+  const [skillGems, setSkillGems] = useState([]);
+  const [uniqueAccessories, setUniqueAccessories] = useState([]);
   const [uniqueArmours, setUniqueArmours] = useState([]);
-  //const uniqueArmours = await getData("UniqueArmour");
+  const [uniqueFlasks, setUniqueFlasks] = useState([]);
+  const [uniqueWeapons, setUniqueWeapons] = useState([]);
 
   useEffect(() => {
-    //getData("UniqueArmour").then(setDivCards);
+    getData("DivinationCard").then(setDivCards);
+    getData("SkillGem").then(setSkillGems);
+    getData("UniqueAccessory").then(setUniqueAccessories);
     getData("UniqueArmour").then(setUniqueArmours);
+    getData("UniqueFlask").then(setUniqueFlasks);
+    getData("UniqueWeapon").then(setUniqueWeapons);
   }, []);
   const allItems = [
-    // ...skillGems.lines,
-    // ...uniqueAccessories.lines,
-    ...uniqueArmours
-    // ...uniqueFlasks.lines,
-    // ...uniqueWeapons.lines
+    ...skillGems,
+    ...uniqueAccessories,
+    ...uniqueArmours,
+    ...uniqueFlasks,
+    ...uniqueWeapons
   ];
 
   const cardsToTrack = [
@@ -52,7 +59,7 @@ function App() {
     `Hunter's Reward`
   ];
 
-  const matchedItems = divCards.lines.filter(card =>
+  const matchedItems = divCards.filter(card =>
     cardsToTrack.includes(card.name)
   );
 
@@ -62,7 +69,7 @@ function App() {
 
     let result = {
       type: modifierText.match(/(?<=<)(.*)(?=>)/)[0],
-      item: allItems.find(item => item.name === name) || {}
+      item: allItems.find(item => item.name === name && item.links === 0) || {}
     };
 
     return result;
