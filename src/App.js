@@ -1,8 +1,46 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import divCards from "./sampleData/divinationCards";
+// import skillGems from "./sampleData/skillGems";
+// import uniqueAccessories from "./sampleData/uniqueAccessories";
+// import uniqueArmours from "./sampleData/uniqueArmours";
+// import uniqueFlasks from "./sampleData/uniqueFlasks";
+// import uniqueWeapons from "./sampleData/uniqueWeapons";
+
+const getData = async type => {
+  const response = await fetch(
+    `https://poe.ninja/api/data/itemoverview?league=Metamorph&type=${type}&language=en`,
+    {
+      method: "GET",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }
+  );
+
+  const data = await response.json();
+
+  return data.lines;
+};
 
 function App() {
+  //const [divCards, setDivCards] = useState([]);
+  const [uniqueArmours, setUniqueArmours] = useState([]);
+  //const uniqueArmours = await getData("UniqueArmour");
+
+  useEffect(() => {
+    //getData("UniqueArmour").then(setDivCards);
+    getData("UniqueArmour").then(setUniqueArmours);
+  }, []);
+  const allItems = [
+    // ...skillGems.lines,
+    // ...uniqueAccessories.lines,
+    ...uniqueArmours
+    // ...uniqueFlasks.lines,
+    // ...uniqueWeapons.lines
+  ];
+
   const cardsToTrack = [
     "Beauty Through Death",
     "The World Eater",
@@ -18,9 +56,21 @@ function App() {
     cardsToTrack.includes(card.name)
   );
 
+  function extractDivCardOutput(card) {
+    const modifierText = card.explicitModifiers[0].text;
+    const name = modifierText.match(/(?<={)(.*)(?=})/)[0];
+
+    let result = {
+      type: modifierText.match(/(?<=<)(.*)(?=>)/)[0],
+      item: allItems.find(item => item.name === name) || {}
+    };
+
+    return result;
+  }
+
   function generateLink(item) {
     const basePath =
-      "https://www.pathofexile.com/api/trade/search/Metamorph?redirect&source=";    
+      "https://www.pathofexile.com/api/trade/search/Metamorph?redirect&source=";
     const query = {
       query: {
         //status: { option: "any" },
@@ -33,23 +83,64 @@ function App() {
       },
       sort: { price: "asc" }
     };
-    
+
     return basePath + JSON.stringify(query);
   }
+
+  function getCost({ exaltedValue, chaosValue, stackSize }) {
+    let output = {};
+    if (exaltedValue >= 1) {
+      output = {
+        value: exaltedValue,
+        suffix: "ex",
+        text: `${exaltedValue}ex`
+      };
+    } else if (chaosValue > 0) {
+      output = {
+        value: chaosValue,
+        suffix: "c",
+        text: `${chaosValue}c`
+      };
+    }
+
+    const stackCostInEx = exaltedValue * stackSize;
+    const stackCostInChaos = chaosValue * stackSize;
+    if (stackCostInEx > 1) {
+      output.stackCost = stackCostInEx;
+      output.stackSuffix = "ex";
+      output.stackText = `${stackCostInEx.toFixed(1)}ex`;
+    } else {
+      output.stackCost = stackCostInChaos;
+      output.stackSuffix = "c";
+      output.stackText = `${Math.round(stackCostInChaos)}c`;
+    }
+
+    return output;
+  }
+
   return (
     <div className="App">
       <table>
         <thead>
           <tr>
             <th>Card</th>
-            <th>Chaos Cost</th>
-            <th>Exalted Cost</th>
+            <th>Cost</th>
             <th>Stack</th>
-            <th>Cost per stack</th>
+            <th>Stack Cost</th>
+            <th>Output</th>
+            <th>Revenue</th>
+            <th>Profit</th>
+            <th>Margin</th>
           </tr>
         </thead>
         <tbody>
           {matchedItems.map(item => {
+            const outputItem = extractDivCardOutput(item);
+            const cardCost = getCost(item);
+            const outputCost = getCost(outputItem.item);
+            const profit = (outputCost.value - cardCost.stackCost).toFixed(1);
+            const margin = ((profit / outputCost.value) * 100).toFixed(2);
+
             return (
               <tr>
                 <td>
@@ -57,10 +148,16 @@ function App() {
                     {item.name}
                   </a>
                 </td>
-                <td>{item.chaosValue}c</td>
-                <td>{item.exaltedValue}ex</td>
+                <td>{cardCost.text}</td>
                 <td>{item.stackSize}</td>
-                <td>{Math.round(item.chaosValue * item.stackSize, 0)}c</td>
+                <td>{cardCost.stackText}</td>
+                <td>{outputItem.item.name}</td>
+                <td>{outputCost.text}</td>
+                <td>
+                  {profit}
+                  {outputCost.suffix}
+                </td>
+                <td>{margin}%</td>
               </tr>
             );
           })}
