@@ -30,7 +30,10 @@ function App() {
     ...uniqueWeapons
   ];
 
-  let tradeItems = generateTradeItems(divCards, allItems);
+  let tradeItems = generateTradeItems(divCards, allItems)
+    //.filter(item => item.profit.exalted > 1 || (item.margin > 10 && item.profit.chaos > 30))
+    .filter(item => !["normal", "whiteitem", "magicitem", "rareitem"].includes(item.outputItem.type))
+    .sort((a, b) => b.profit.chaos - a.profit.chaos);
 
   return (
     <div className="App">

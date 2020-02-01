@@ -21,29 +21,27 @@ export default function TradeTable({ items }) {
             card,
             tradeUrl,
             cardCost,
+            stackCost,
             outputItem,
             outputCost,
             profit,
             margin
           }) => {
             return (
-              <tr>
+              <tr key={card.id}>
                 <td>
                   <a href={tradeUrl} target="_blank">
                     {card.name}
                   </a>
                 </td>
-                <td>{cardCost.text}</td>
+                <td>{cardCost.normalized.text}</td>
                 <td>{card.stackSize}</td>
-                <td>{cardCost.stackText}</td>
+                <td>{stackCost.normalized.text}</td>
                 <td>{outputItem.type}</td>
                 <td>{outputItem.item.name}</td>
-                <td>{outputCost.text}</td>
-                <td>
-                  {isNaN(profit) ? "" : profit}
-                  {outputCost.suffix}
-                </td>
-                <td>{isNaN(margin) ? "" : `${margin}%`}</td>
+                <td>{outputCost.normalized.text}</td>
+                <td>{profit.normalized.text}</td>
+                <td>{isNaN(margin) ? "" : `${margin.toFixed(2)}%`}</td>
               </tr>
             );
           }
