@@ -12,17 +12,57 @@ function extractDivCardOutput(card, allItems) {
   const type = (modifierText.match(/(?<=<)(.*)(?=>)/) || [])[0];
   let name = (modifierText.match(/(?<={)(.*)(?=})/) || [])[0];
   let variant = null;
+  let item;
 
   if (type === "prophecy" && prophecyMap[name]) {
     const mapped = prophecyMap[name];
     name = mapped.name;
     variant = mapped.variant;
+    item = allItems.find(item => item.name === name && item.variant == variant && item.links === 0) || {};
+  }
+
+  if (type === "gemitem") {
+    const corrupted = modifierText.includes("corrupted");
+    const gemLevel = parseInt((name.match(/\d+/) || [])[0] || 1);
+
+    const gemQuality = parseInt((modifierText.match(/(?<={Quality:} <augmented>{+)(.*)(?=%})/) || [])[0]);
+    let gemQualitiesToCheck;
+
+    if (isNaN(gemQuality)) {
+      if (gemLevel === 3) {
+        gemQualitiesToCheck = [0, 13, 15, 20, 23];
+      } else if (gemLevel === 4) {
+        gemQualitiesToCheck = [0, 20];
+      } else {
+        gemQualitiesToCheck = [0];
+      }
+    } else {
+      gemQualitiesToCheck = [gemQuality];
+    }
+
+    const gemName = name
+      .replace(/[0-9]/g, "")
+      .replace("Level", "")
+      .replace("Superior", "")
+      .trim();
+
+    item = allItems.find(
+      i =>
+        (i.name === gemName || i.name === `${gemName} Support`) &&
+        i.gemLevel === gemLevel &&
+        gemQualitiesToCheck.includes(i.gemQuality) &&
+        i.corrupted === corrupted
+    );
+  }
+
+  if (!item) {
+    item = allItems.find(i => i.name === name && i.links === 0) || {};
   }
 
   let result = {
     type,
     name,
-    item: allItems.find(item => item.name === name && item.variant == variant && item.links === 0) || {}
+    item
   };
 
   return result;

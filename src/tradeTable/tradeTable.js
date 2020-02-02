@@ -10,9 +10,18 @@ function getSparkline({ data, totalChange } = {}) {
   );
 }
 
+function getOutputItemName(outputItem) {
+  const { name, gemLevel, gemQuality, corrupted } = outputItem.item;
+  if (outputItem.type === "gemitem" && name) {
+    return `${name} ${corrupted ? "c" : ""}${gemLevel}/${gemQuality}`;
+  }
+
+  return name;
+}
+
 export default function TradeTable({ items }) {
   return (
-    <table class="tradeTable">
+    <table className="tradeTable">
       <thead>
         <tr>
           <th>Card</th>
@@ -42,7 +51,7 @@ export default function TradeTable({ items }) {
               <td>{card.stackSize}</td>
               <td>{stackCost.normalized.text}</td>
               {/* <td>{outputItem.type}</td> */}
-              <td>{outputItem.item.name}</td>
+              <td>{getOutputItemName(outputItem)}</td>
               <td>{getSparkline(outputItem.item.sparkline)}</td>
               <td>{outputCost.normalized.text}</td>
               <td>{profit.normalized.text}</td>

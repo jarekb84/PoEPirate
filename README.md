@@ -6,7 +6,7 @@ TODO
 - [x] add trendlines to card
 - [x] add trendline to output
 - [ ] add support for currency items
-- [ ] add support for skill gems
+- [x] add support for skill gems
 - [x] add support for fated uniques
 - [x] add normal/magic/rare item handling
 - [ ] add filtering
@@ -20,3 +20,4 @@ TODO
 - [ ] add data caching
 - [ ] add support for pricing currupted output items
 - [x] fix profit issue where cost is normalized to ex but revenue is normalized to chaos
+- [ ] add support for cards where output can be one of several items (gems/prophecies)

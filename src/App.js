@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import { getDataMock as getData } from "./data/fetchData";
+//import { getData } from "./data/fetchData";
 import { generateTradeItems } from "./tradeItems";
 import TradeTable from "./tradeTable/tradeTable";
 
@@ -34,10 +35,10 @@ function App() {
   ];
 
   let tradeItems = generateTradeItems(divCards, allItems)
-    //.filter(item => item.profit.exalted > 1 || (item.margin > 10 && item.profit.chaos > 30))
-    .filter(item => !["normal", "whiteitem", "magicitem", "rareitem"].includes(item.outputItem.type))
-    //.filter(item => !["uniqueitem", "divination", "prophecy"].includes(item.outputItem.type))
-    //.filter(item => ["prophecy"].includes(item.outputItem.type))
+    .filter(item => item.profit.exalted > 1 || (item.margin > 10 && item.profit.chaos > 30))
+    //.filter(item => !["normal", "whiteitem", "magicitem", "rareitem"].includes(item.outputItem.type))
+    //.filter(item => !["uniqueitem", "divination"].includes(item.outputItem.type))
+    //.filter(item => ["gemitem"].includes(item.outputItem.type))
     .sort((a, b) => b.profit.chaos - a.profit.chaos);
 
   return (
