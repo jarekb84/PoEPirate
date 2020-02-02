@@ -20,4 +20,7 @@ TODO
 - [ ] add data caching
 - [ ] add support for pricing currupted output items
 - [x] fix profit issue where cost is normalized to ex but revenue is normalized to chaos
-- [ ] add support for cards where output can be one of several items (gems/prophecies)
+- [ ] add support for cards where output can be one of several items
+      gems (random support or spell or lvl 20, ect... gem)
+      prophecies (random master mission)
+      Precursor's Emblem (ring with 5 base types, each with different pricing)
