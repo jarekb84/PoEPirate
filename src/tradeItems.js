@@ -1,10 +1,28 @@
+const prophecyMap = {
+  "Queen's Sacrifice": { name: "Atziri's Reflection" },
+  "Ancient Doom": { name: "Doomfletch's Prism" },
+  "A Master Seeks Help (Niko)": { name: "A Master Seeks Help", variant: "Niko" },
+  "The King's Path": { name: "Kaom's Way" }
+  //"Akil's Prophecy": {}, // random fated unique prophecy,
+  //"A Master Seeks Help": {} // random master mission prophecy
+};
+
 function extractDivCardOutput(card, allItems) {
   const modifierText = ((card || { explicitModifiers: [] }).explicitModifiers[0] || {}).text || "";
-  const name = (modifierText.match(/(?<={)(.*)(?=})/) || [])[0];
+  const type = (modifierText.match(/(?<=<)(.*)(?=>)/) || [])[0];
+  let name = (modifierText.match(/(?<={)(.*)(?=})/) || [])[0];
+  let variant = null;
+
+  if (type === "prophecy" && prophecyMap[name]) {
+    const mapped = prophecyMap[name];
+    name = mapped.name;
+    variant = mapped.variant;
+  }
 
   let result = {
-    type: (modifierText.match(/(?<=<)(.*)(?=>)/) || [])[0],
-    item: allItems.find(item => item.name === name && item.links === 0) || {}
+    type,
+    name,
+    item: allItems.find(item => item.name === name && item.variant == variant && item.links === 0) || {}
   };
 
   return result;

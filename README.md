@@ -7,7 +7,7 @@ TODO
 - [ ] add trendline to output
 - [ ] add support for currency items
 - [ ] add support for skill gems
-- [ ] add support for fated uniques
+- [x] add support for fated uniques
 - [x] add normal/magic/rare item handling
 - [ ] add filtering
 - [ ] add sorting
