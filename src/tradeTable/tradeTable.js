@@ -1,4 +1,5 @@
 import React from "react";
+import "./tradeTable.css";
 import { Sparklines, SparklinesLine } from "react-sparklines";
 
 function getSparkline({ data, totalChange } = {}) {
@@ -11,7 +12,7 @@ function getSparkline({ data, totalChange } = {}) {
 
 export default function TradeTable({ items }) {
   return (
-    <table>
+    <table class="tradeTable">
       <thead>
         <tr>
           <th>Card</th>

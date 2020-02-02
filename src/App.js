@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import { getDataMock as getData } from "./data/fetchData";
 import { generateTradeItems } from "./tradeItems";
-import TradeTable from "./tradeTable";
+import TradeTable from "./tradeTable/tradeTable";
 
 function App() {
   const [divCards, setDivCards] = useState([]);
