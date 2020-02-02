@@ -3,8 +3,8 @@
 TODO
 
 - [x] refactor POC
-- [ ] add trendlines to card
-- [ ] add trendline to output
+- [x] add trendlines to card
+- [x] add trendline to output
 - [ ] add support for currency items
 - [ ] add support for skill gems
 - [x] add support for fated uniques
