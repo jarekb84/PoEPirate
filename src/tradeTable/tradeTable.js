@@ -26,7 +26,8 @@ export default function TradeTable({ items }) {
         <tr>
           <th>Card</th>
           <th>Trend</th>
-          <th>Cost</th>
+          <th>Current</th>
+          <th>Target</th>
           <th>Stack</th>
           <th>Stack Cost</th>
           {/* <th>OutputType</th> */}
@@ -38,27 +39,30 @@ export default function TradeTable({ items }) {
         </tr>
       </thead>
       <tbody>
-        {items.map(({ card, tradeUrl, cardCost, stackCost, outputItem, outputCost, profit, margin }) => {
-          return (
-            <tr key={card.id}>
-              <td>
-                <a href={tradeUrl} target="_blank">
-                  {card.name}
-                </a>
-              </td>
-              <td>{getSparkline(card.sparkline)}</td>
-              <td>{cardCost.normalized.text}</td>
-              <td>{card.stackSize}</td>
-              <td>{stackCost.normalized.text}</td>
-              {/* <td>{outputItem.type}</td> */}
-              <td>{getOutputItemName(outputItem)}</td>
-              <td>{getSparkline(outputItem.item.sparkline)}</td>
-              <td>{outputCost.normalized.text}</td>
-              <td>{profit.normalized.text}</td>
-              <td>{isNaN(margin) ? "" : `${margin.toFixed(2)}%`}</td>
-            </tr>
-          );
-        })}
+        {items.map(
+          ({ card, tradeUrl, cardCost, targetPurchasePrice, stackCost, outputItem, outputCost, profit, margin }) => {
+            return (
+              <tr key={card.id}>
+                <td>
+                  <a href={tradeUrl} target="_blank">
+                    {card.name}
+                  </a>
+                </td>
+                <td>{getSparkline(card.sparkline)}</td>
+                <td>{cardCost.normalized.text}</td>
+                <td>{targetPurchasePrice.normalized.text}</td>
+                <td>{card.stackSize}</td>
+                <td>{stackCost.normalized.text}</td>
+                {/* <td>{outputItem.type}</td> */}
+                <td>{getOutputItemName(outputItem)}</td>
+                <td>{getSparkline(outputItem.item.sparkline)}</td>
+                <td>{outputCost.normalized.text}</td>
+                <td>{profit.normalized.text}</td>
+                <td>{isNaN(margin) ? "" : `${margin.toFixed(2)}%`}</td>
+              </tr>
+            );
+          }
+        )}
       </tbody>
     </table>
   );

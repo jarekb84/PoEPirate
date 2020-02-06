@@ -68,15 +68,16 @@ function extractDivCardOutput(card, allItems) {
   return result;
 }
 
-function generateLink(item) {
+function generateLink(item, { normalized }) {
   const basePath = "https://www.pathofexile.com/api/trade/search/Metamorph?redirect&source=";
   const query = {
     query: {
-      //status: { option: "any" },
       type: item.name,
-      //stats: [{ type: "and", filters: [], disabled: false }],
+
       filters: {
-        trade_filters: { filters: { price: { max: item.chaosValue } } },
+        trade_filters: {
+          filters: { price: { max: normalized.value, option: normalized.tradeCostTerm } }
+        },
         type_filters: { filters: { category: { option: "card" } } }
       }
     },
@@ -92,12 +93,14 @@ function getNormalizedCurrency(chaos, exalted) {
     output.normalized = {
       value: exalted,
       suffix: "ex",
+      tradeCostTerm: "exa",
       text: `${exalted.toFixed(2)}ex`
     };
   } else if (Math.abs(chaos) >= 0) {
     output.normalized = {
       value: chaos,
       suffix: "c",
+      tradeCostTerm: undefined,
       text: `${chaos.toFixed(0)}c`
     };
   }
@@ -112,12 +115,14 @@ export function generateTradeItems(divCards, allItems) {
     const cardCost = getNormalizedCurrency(card.chaosValue, card.exaltedValue);
     const stackCost = getNormalizedCurrency(card.chaosValue * card.stackSize, card.exaltedValue * card.stackSize);
     const profit = getNormalizedCurrency(outputCost.chaos - stackCost.chaos, outputCost.exalted - stackCost.exalted);
+    const targetPurchasePrice = getNormalizedCurrency(card.chaosValue - 1, card.exaltedValue - 0.1);
 
     return {
       card,
-      tradeUrl: generateLink(card),
+      tradeUrl: generateLink(card, targetPurchasePrice),
       outputItem,
       cardCost,
+      targetPurchasePrice,
       stackCost,
       outputCost,
       profit,
