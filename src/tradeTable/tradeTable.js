@@ -10,13 +10,18 @@ function getSparkline({ data, totalChange } = {}) {
   );
 }
 
-function getOutputItemName(outputItem) {
+function getOutputItemName(outputItem, outputItemLink) {
   const { name, gemLevel, gemQuality, corrupted } = outputItem.item;
+  let text = name;
   if (outputItem.type === "gemitem" && name) {
-    return `${name} ${corrupted ? "c" : ""}${gemLevel}/${gemQuality}`;
+    text = `${name} ${corrupted ? "c" : ""}${gemLevel}/${gemQuality}`;
   }
 
-  return name;
+  return (
+    <a href={outputItemLink} target="_blank">
+      {text}
+    </a>
+  );
 }
 
 export default function TradeTable({ items }) {
@@ -40,7 +45,18 @@ export default function TradeTable({ items }) {
       </thead>
       <tbody>
         {items.map(
-          ({ card, tradeUrl, cardCost, targetPurchasePrice, stackCost, outputItem, outputCost, profit, margin }) => {
+          ({
+            card,
+            tradeUrl,
+            cardCost,
+            targetPurchasePrice,
+            stackCost,
+            outputItem,
+            outputItemLink,
+            outputCost,
+            profit,
+            margin
+          }) => {
             return (
               <tr key={card.id}>
                 <td>
@@ -54,7 +70,7 @@ export default function TradeTable({ items }) {
                 <td>{card.stackSize}</td>
                 <td>{stackCost.normalized.text}</td>
                 {/* <td>{outputItem.type}</td> */}
-                <td>{getOutputItemName(outputItem)}</td>
+                <td>{getOutputItemName(outputItem, outputItemLink)}</td>
                 <td>{getSparkline(outputItem.item.sparkline)}</td>
                 <td>{outputCost.normalized.text}</td>
                 <td>{profit.normalized.text}</td>

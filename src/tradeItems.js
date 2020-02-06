@@ -67,19 +67,51 @@ function extractDivCardOutput(card, allItems) {
 
   return result;
 }
+const basePath = "https://www.pathofexile.com/api/trade/search/Metamorph?redirect&source=";
 
 function generateLink(item, { normalized }) {
-  const basePath = "https://www.pathofexile.com/api/trade/search/Metamorph?redirect&source=";
   const query = {
     query: {
       type: item.name,
-
       filters: {
         trade_filters: {
           filters: { price: { max: normalized.value, option: normalized.tradeCostTerm } }
         },
         type_filters: { filters: { category: { option: "card" } } }
       }
+    },
+    sort: { price: "asc" }
+  };
+
+  return basePath + JSON.stringify(query);
+}
+
+function generateOutputItemLink({ type, item }) {
+  const queryTerm = ["gemitem", "divination"].includes(type) ? "type" : "name";
+  let filters = {};
+
+  if (type === "gemitem") {
+    filters = {
+      misc_filters: {
+        filters: {
+          corrupted: {
+            option: item.corrupted
+          },
+          quality: {
+            min: item.gemQuality
+          },
+          gem_level: {
+            min: item.gemLevel
+          }
+        }
+      }
+    };
+  }
+
+  const query = {
+    query: {
+      [queryTerm]: item.name,
+      filters
     },
     sort: { price: "asc" }
   };
@@ -121,6 +153,7 @@ export function generateTradeItems(divCards, allItems) {
       card,
       tradeUrl: generateLink(card, targetPurchasePrice),
       outputItem,
+      outputItemLink: generateOutputItemLink(outputItem),
       cardCost,
       targetPurchasePrice,
       stackCost,

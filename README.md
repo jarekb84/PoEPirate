@@ -14,7 +14,7 @@ TODO
 - [x] intellegenlty reduce price filter
       max price in chaos when card value in chaos
       max price in ex when card value in ex
-- [ ] add link for output item to trade site
+- [x] add link for output item to trade site
 - [ ] add link for wiki for card
 - [ ] add link for wiki for output item
 - [ ] add data caching
