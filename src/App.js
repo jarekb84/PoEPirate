@@ -7,6 +7,7 @@ import TradeTable from "./tradeTable/tradeTable";
 
 function App() {
   const [divCards, setDivCards] = useState([]);
+  const [currency, setCurrency] = useState([]);
   const [skillGems, setSkillGems] = useState([]);
   const [prophecies, setProphecies] = useState([]);
   const [uniqueAccessories, setUniqueAccessories] = useState([]);
@@ -22,10 +23,12 @@ function App() {
     getData("UniqueArmour").then(setUniqueArmours);
     getData("UniqueFlask").then(setUniqueFlasks);
     getData("UniqueWeapon").then(setUniqueWeapons);
+    getData("Currency").then(setCurrency);
   }, []);
 
   const allItems = [
     ...divCards,
+    ...currency,
     ...skillGems,
     ...prophecies,
     ...uniqueAccessories,

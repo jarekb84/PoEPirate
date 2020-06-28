@@ -1,4 +1,5 @@
 import DivinationCard from "./DivinationCard";
+import Currency from "./Currency";
 import SkillGem from "./SkillGem";
 import Prophecy from "./Prophecy";
 import UniqueAccessory from "./UniqueAccessory";
@@ -8,10 +9,11 @@ import UniqueWeapon from "./UniqueWeapon";
 
 export default {
   DivinationCard,
+  Currency,
   SkillGem,
   Prophecy,
   UniqueAccessory,
   UniqueArmour,
   UniqueFlask,
-  UniqueWeapon
+  UniqueWeapon,
 };
