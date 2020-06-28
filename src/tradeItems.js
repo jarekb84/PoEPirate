@@ -2,7 +2,7 @@ const prophecyMap = {
   "Queen's Sacrifice": { name: "Atziri's Reflection" },
   "Ancient Doom": { name: "Doomfletch's Prism" },
   "A Master Seeks Help (Niko)": { name: "A Master Seeks Help", variant: "Niko" },
-  "The King's Path": { name: "Kaom's Way" }
+  "The King's Path": { name: "Kaom's Way" },
   //"Akil's Prophecy": {}, // random fated unique prophecy,
   //"A Master Seeks Help": {} // random master mission prophecy
 };
@@ -18,7 +18,7 @@ function extractDivCardOutput(card, allItems) {
     const mapped = prophecyMap[name];
     name = mapped.name;
     variant = mapped.variant;
-    item = allItems.find(item => item.name === name && item.variant == variant && item.links === 0) || {};
+    item = allItems.find((item) => item.name === name && item.variant == variant && item.links === 0) || {};
   }
 
   if (type === "gemitem") {
@@ -40,14 +40,10 @@ function extractDivCardOutput(card, allItems) {
       gemQualitiesToCheck = [gemQuality];
     }
 
-    const gemName = name
-      .replace(/[0-9]/g, "")
-      .replace("Level", "")
-      .replace("Superior", "")
-      .trim();
+    const gemName = name.replace(/[0-9]/g, "").replace("Level", "").replace("Superior", "").trim();
 
     item = allItems.find(
-      i =>
+      (i) =>
         (i.name === gemName || i.name === `${gemName} Support`) &&
         i.gemLevel === gemLevel &&
         gemQualitiesToCheck.includes(i.gemQuality) &&
@@ -56,18 +52,18 @@ function extractDivCardOutput(card, allItems) {
   }
 
   if (!item) {
-    item = allItems.find(i => i.name === name && i.links === 0) || {};
+    item = allItems.find((i) => i.name === name && i.links === 0) || {};
   }
 
   let result = {
     type,
     name,
-    item
+    item,
   };
 
   return result;
 }
-const basePath = "https://www.pathofexile.com/api/trade/search/Metamorph?redirect&source=";
+const basePath = "https://www.pathofexile.com/trade/search/Harvest?q=";
 
 function generateLink(item, { normalized }) {
   const query = {
@@ -75,12 +71,12 @@ function generateLink(item, { normalized }) {
       type: item.name,
       filters: {
         trade_filters: {
-          filters: { price: { max: normalized.value, option: normalized.tradeCostTerm } }
+          filters: { price: { max: normalized.value, option: normalized.tradeCostTerm } },
         },
-        type_filters: { filters: { category: { option: "card" } } }
-      }
+        type_filters: { filters: { category: { option: "card" } } },
+      },
     },
-    sort: { price: "asc" }
+    sort: { price: "asc" },
   };
 
   return basePath + JSON.stringify(query);
@@ -95,25 +91,25 @@ function generateOutputItemLink({ type, item }) {
       misc_filters: {
         filters: {
           corrupted: {
-            option: item.corrupted
+            option: item.corrupted,
           },
           quality: {
-            min: item.gemQuality
+            min: item.gemQuality,
           },
           gem_level: {
-            min: item.gemLevel
-          }
-        }
-      }
+            min: item.gemLevel,
+          },
+        },
+      },
     };
   }
 
   const query = {
     query: {
       [queryTerm]: item.name,
-      filters
+      filters,
     },
-    sort: { price: "asc" }
+    sort: { price: "asc" },
   };
 
   return basePath + JSON.stringify(query);
@@ -126,14 +122,14 @@ function getNormalizedCurrency(chaos, exalted) {
       value: exalted,
       suffix: "ex",
       tradeCostTerm: "exa",
-      text: `${exalted.toFixed(2)}ex`
+      text: `${exalted.toFixed(2)}ex`,
     };
   } else if (Math.abs(chaos) >= 0) {
     output.normalized = {
       value: chaos,
       suffix: "c",
       tradeCostTerm: undefined,
-      text: `${chaos.toFixed(0)}c`
+      text: `${chaos.toFixed(0)}c`,
     };
   }
 
@@ -141,7 +137,7 @@ function getNormalizedCurrency(chaos, exalted) {
 }
 
 export function generateTradeItems(divCards, allItems) {
-  return divCards.map(card => {
+  return divCards.map((card) => {
     const outputItem = extractDivCardOutput(card, allItems);
     const outputCost = getNormalizedCurrency(outputItem.item.chaosValue, outputItem.item.exaltedValue);
     const cardCost = getNormalizedCurrency(card.chaosValue, card.exaltedValue);
@@ -159,7 +155,7 @@ export function generateTradeItems(divCards, allItems) {
       stackCost,
       outputCost,
       profit,
-      margin: (profit.chaos / outputCost.chaos) * 100
+      margin: (profit.chaos / outputCost.chaos) * 100,
     };
   });
 }
