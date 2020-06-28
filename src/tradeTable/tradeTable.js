@@ -17,8 +17,12 @@ function getOutputItemName(outputItem, outputItemLink) {
     text = `${name} ${corrupted ? "c" : ""}${gemLevel}/${gemQuality}`;
   }
 
+  if (outputItem.type === "currencyitem" && name) {
+    console.log(outputItemLink);
+  }
+
   return (
-    <a href={outputItemLink} target="_blank">
+    <a href={outputItemLink} target="_blank" rel="noopener noreferrer">
       {text}
     </a>
   );
@@ -35,7 +39,9 @@ export default function TradeTable({ items }) {
           <th>Target</th>
           <th>Stack</th>
           <th>Stack Cost</th>
-          {/* <th>OutputType</th> */}
+          <th>OutputType</th>
+          <th>OutputName</th>
+          <th>modifierText</th>
           <th>Output</th>
           <th>Trend</th>
           <th>Revenue</th>
@@ -55,12 +61,12 @@ export default function TradeTable({ items }) {
             outputItemLink,
             outputCost,
             profit,
-            margin
+            margin,
           }) => {
             return (
               <tr key={card.id}>
                 <td>
-                  <a href={tradeUrl} target="_blank">
+                  <a href={tradeUrl} target="_blank" rel="noopener noreferrer">
                     {card.name}
                   </a>
                 </td>
@@ -69,7 +75,9 @@ export default function TradeTable({ items }) {
                 <td>{targetPurchasePrice.normalized.text}</td>
                 <td>{card.stackSize}</td>
                 <td>{stackCost.normalized.text}</td>
-                {/* <td>{outputItem.type}</td> */}
+                <td>{outputItem.type}</td>
+                <td>{outputItem.name}</td>
+                <td>{outputItem.modifierText}</td>
                 <td>{getOutputItemName(outputItem, outputItemLink)}</td>
                 <td>{getSparkline(outputItem.item.sparkline)}</td>
                 <td>{outputCost.normalized.text}</td>

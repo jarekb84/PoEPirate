@@ -17,13 +17,13 @@ function App() {
 
   useEffect(() => {
     getData("DivinationCard").then(setDivCards);
+    getData("Currency").then(setCurrency);
     getData("SkillGem").then(setSkillGems);
     getData("Prophecy").then(setProphecies);
     getData("UniqueAccessory").then(setUniqueAccessories);
     getData("UniqueArmour").then(setUniqueArmours);
     getData("UniqueFlask").then(setUniqueFlasks);
     getData("UniqueWeapon").then(setUniqueWeapons);
-    getData("Currency").then(setCurrency);
   }, []);
 
   const allItems = [

@@ -18,7 +18,7 @@ function extractDivCardOutput(card, allItems) {
     const mapped = prophecyMap[name];
     name = mapped.name;
     variant = mapped.variant;
-    item = allItems.find((item) => item.name === name && item.variant == variant && item.links === 0) || {};
+    item = allItems.find((item) => item.name === name && item.variant === variant && item.links === 0) || {};
   }
 
   if (type === "gemitem") {
@@ -51,12 +51,20 @@ function extractDivCardOutput(card, allItems) {
     );
   }
 
+  if (type === "currencyitem") {
+    item = allItems.find((i) => i.currencyTypeName === name) || {};
+    item.name = name;
+    item.sparkline = item.receiveSparkLine;
+    item.chaosValue = item.chaosEquivalent;
+  }
+
   if (!item) {
     item = allItems.find((i) => i.name === name && i.links === 0) || {};
   }
 
   let result = {
     type,
+    modifierText,
     name,
     item,
   };
@@ -83,7 +91,7 @@ function generateLink(item, { normalized }) {
 }
 
 function generateOutputItemLink({ type, item }) {
-  const queryTerm = ["gemitem", "divination"].includes(type) ? "type" : "name";
+  const queryTerm = ["gemitem", "divination", "currencyitem"].includes(type) ? "type" : "name";
   let filters = {};
 
   if (type === "gemitem") {
