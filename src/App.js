@@ -41,11 +41,12 @@ function App() {
   ];
 
   let tradeItems = generateTradeItems(divCards, allItems)
-    //.filter(item => item.profit.exalted > 1 || (item.margin > 10 && item.profit.chaos > 30))
+    .filter((item) => item.profit.exalted > 1 || (item.margin > 10 && item.profit.chaos > 30))
     //.filter(item => item.card.name !== "Remembrance") // ring with multiple output types
     //.filter((item) => !["normal", "whiteitem", "magicitem", "rareitem"].includes(item.outputItem.type))
     //.filter(item => !["uniqueitem", "divination"].includes(item.outputItem.type))
     //.filter(item => ["gemitem"].includes(item.outputItem.type))
+    //.filter(item => item.card.name !== "Remembrance") // ring with multiple output types
     .sort((a, b) => b.profit.chaos - a.profit.chaos);
 
   return (

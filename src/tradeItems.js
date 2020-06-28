@@ -1,8 +1,8 @@
 const prophecyMap = {
-  "Queen's Sacrifice": { name: "Atziri's Reflection" },
-  "Ancient Doom": { name: "Doomfletch's Prism" },
+  "Queen's Sacrifice": { name: "Atziri's Reflection", variant: null },
+  "Ancient Doom": { name: "Doomfletch's Prism", variant: null },
   "A Master Seeks Help (Niko)": { name: "A Master Seeks Help", variant: "Niko" },
-  "The King's Path": { name: "Kaom's Way" },
+  "The King's Path": { name: "Kaom's Way", variant: null },
   //"Akil's Prophecy": {}, // random fated unique prophecy,
   //"A Master Seeks Help": {} // random master mission prophecy
 };
