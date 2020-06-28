@@ -14,6 +14,7 @@ function App() {
   const [uniqueArmours, setUniqueArmours] = useState([]);
   const [uniqueFlasks, setUniqueFlasks] = useState([]);
   const [uniqueWeapons, setUniqueWeapons] = useState([]);
+  const [uniqueJewels, setUniqueJewels] = useState([]);
 
   useEffect(() => {
     getData("DivinationCard").then(setDivCards);
@@ -24,6 +25,7 @@ function App() {
     getData("UniqueArmour").then(setUniqueArmours);
     getData("UniqueFlask").then(setUniqueFlasks);
     getData("UniqueWeapon").then(setUniqueWeapons);
+    getData("UniqueJewel").then(setUniqueJewels);
   }, []);
 
   const allItems = [
@@ -35,12 +37,13 @@ function App() {
     ...uniqueArmours,
     ...uniqueFlasks,
     ...uniqueWeapons,
+    ...uniqueJewels,
   ];
 
   let tradeItems = generateTradeItems(divCards, allItems)
     //.filter(item => item.profit.exalted > 1 || (item.margin > 10 && item.profit.chaos > 30))
     //.filter(item => item.card.name !== "Remembrance") // ring with multiple output types
-    //.filter(item => !["normal", "whiteitem", "magicitem", "rareitem"].includes(item.outputItem.type))
+    //.filter((item) => !["normal", "whiteitem", "magicitem", "rareitem"].includes(item.outputItem.type))
     //.filter(item => !["uniqueitem", "divination"].includes(item.outputItem.type))
     //.filter(item => ["gemitem"].includes(item.outputItem.type))
     .sort((a, b) => b.profit.chaos - a.profit.chaos);

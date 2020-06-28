@@ -6,6 +6,7 @@ import UniqueAccessory from "./UniqueAccessory";
 import UniqueArmour from "./UniqueArmour";
 import UniqueFlask from "./UniqueFlask";
 import UniqueWeapon from "./UniqueWeapon";
+import UniqueJewel from "./UniqueJewel.json";
 
 export default {
   DivinationCard,
@@ -16,4 +17,5 @@ export default {
   UniqueArmour,
   UniqueFlask,
   UniqueWeapon,
+  UniqueJewel,
 };
