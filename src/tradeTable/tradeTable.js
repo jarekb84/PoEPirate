@@ -39,9 +39,9 @@ export default function TradeTable({ items }) {
           <th>Target</th>
           <th>Stack</th>
           <th>Stack Cost</th>
-          <th>OutputType</th>
+          {/* <th>OutputType</th>
           <th>OutputName</th>
-          <th>modifierText</th>
+          <th>modifierText</th> */}
           <th>Output</th>
           <th>Trend</th>
           <th>Revenue</th>
@@ -75,9 +75,9 @@ export default function TradeTable({ items }) {
                 <td>{targetPurchasePrice.normalized.text}</td>
                 <td>{card.stackSize}</td>
                 <td>{stackCost.normalized.text}</td>
-                <td>{outputItem.type}</td>
+                {/* <td>{outputItem.type}</td>
                 <td>{outputItem.name}</td>
-                <td>{outputItem.modifierText}</td>
+                <td>{outputItem.modifierText}</td> */}
                 <td>{getOutputItemName(outputItem, outputItemLink)}</td>
                 <td>{getSparkline(outputItem.item.sparkline)}</td>
                 <td>{outputCost.normalized.text}</td>
